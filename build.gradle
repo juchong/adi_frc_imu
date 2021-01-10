@@ -1,105 +1,131 @@
 plugins {
-    id "cpp"
-    id "google-test-test-suite"
-    id "edu.wpi.first.GradleRIO" version "2021.1.2"
+    id 'cpp'
+    id 'java'
+    id 'google-test'
+    id 'edu.wpi.first.wpilib.repositories.WPILibRepositoriesPlugin' version '2020.2'
+    id 'edu.wpi.first.NativeUtils' version '2021.0.5'
+    id 'edu.wpi.first.GradleJni' version '0.11.0'
+    id 'edu.wpi.first.GradleVsCode' version '0.12.0'
 }
 
-// Define my targets (RoboRIO) and artifacts (deployable files)
-// This is added by GradleRIO's backing project EmbeddedTools.
-deploy {
-    targets {
-        roboRIO("roborio") {
-            // Team number is loaded either from the .wpilib/wpilib_preferences.json
-            // or from command line. If not found an exception will be thrown.
-            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
-            // want to store a team number in this file.
-            team = frc.getTeamNumber()
-        }
+allprojects {
+    repositories {
+        mavenCentral()
     }
-    artifacts {
-        frcNativeArtifact('frcCpp') {
-            targets << "roborio"
-            component = 'frcUserProgram'
-            // Debug can be overridden by command line, for use with VSCode
-            debug = frc.getDebugOrDefault(false)
-        }
-        // Built in artifact to deploy arbitrary files to the roboRIO.
-        fileTreeArtifact('frcStaticFileDeploy') {
-            // The directory below is the local directory to deploy
-            files = fileTree(dir: 'src/main/deploy')
-            // Deploy to RoboRIO target, into /home/lvuser/deploy
-            targets << "roborio"
-            directory = '/home/lvuser/deploy'
-        }
+    if (project.hasProperty('releaseMode')) {
+        wpilibRepositories.addAllReleaseRepositories(project)
+    } else {
+        wpilibRepositories.addAllDevelopmentRepositories(project)
     }
 }
 
-// Set this to true to include the src folder in the include directories passed
-// to the compiler. Some eclipse project imports depend on this behavior.
-// We recommend leaving this disabled if possible. Note for eclipse project
-// imports this is enabled by default. For new projects, its disabled
-def includeSrcInIncludeRoot = false
+/******************************************************
+ * Build options
+ * -PreleaseMode will force only release versions of the wpilib repo
+ *
+ * -Ponly<platform> will only build for a specific platform, list:
+ * 
+ * linuxathena
+ * linuxraspbian
+ * linuxaarch64bionic
+ * windowsx86-64
+ * windowsx86
+ * linuxx86-64
+ * osxx86-64
+ ******************************************************/
 
-// Set this to true to enable desktop support.
-def includeDesktopSupport = false
 
-// Enable simulation gui support. Must check the box in vscode to enable support
-// upon debugging
-dependencies {
-    simulation wpi.deps.sim.gui(wpi.platforms.desktop, true)
-    simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, true)
+apply from: 'config.gradle'
 
-    // Websocket extensions require additional configuration.
-    // simulation wpi.deps.sim.ws_server(wpi.platforms.desktop, true)
-    // simulation wpi.deps.sim.ws_client(wpi.platforms.desktop, true)
-}
+apply from: 'dependencies.gradle'
 
-// Simulation configuration (e.g. environment variables).
-sim {
-    // Sets the websocket client remote host.
-    // envVar "HALSIMWS_HOST", "10.0.0.2"
+nativeUtils {
+  exportsConfigs {
+      AdiFrcImu {
+      }
+  }
+  privateExportsConfigs {
+    AdiFrcImuDriver {
+      exportsFile = project.file("src/main/driver/symbols.txt")
+    }
+  }
 }
 
 model {
-    components {
-        frcUserProgram(NativeExecutableSpec) {
-            targetPlatform wpi.platforms.roborio
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
-
-            sources.cpp {
-                source {
-                    srcDir 'src/main/cpp'
-                    include '**/*.cpp', '**/*.cc'
-                }
-                exportedHeaders {
-                    srcDir 'src/main/include'
-                    if (includeSrcInIncludeRoot) {
-                        srcDir 'src/main/cpp'
-                    }
-                }
-            }
-
-            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-            wpi.deps.vendor.cpp(it)
-            wpi.deps.wpilib(it)
+  components {
+    AdiFrcImu(NativeLibrarySpec) {
+      sources {
+        cpp {
+          source {
+            srcDirs 'src/main/native/cpp'
+            include '**/*.cpp'
+          }
+          exportedHeaders {
+            srcDirs 'src/main/native/include'
+          }
         }
+      }
+      binaries.all {
+        lib library: "AdiFrcImuDriver", linkage: 'shared'
+      }
+
+
+      nativeUtils.useRequiredLibrary(it, "wpilib_shared")
     }
-    testSuites {
-        frcUserProgramTest(GoogleTestTestSuiteSpec) {
-            testing $.components.frcUserProgram
 
-            sources.cpp {
-                source {
-                    srcDir 'src/test/cpp'
-                    include '**/*.cpp'
-                }
-            }
-
-            wpi.deps.vendor.cpp(it)
-            wpi.deps.wpilib(it)
-            wpi.deps.googleTest(it)
+    AdiFrcImuDriver(JniNativeLibrarySpec) {
+      enableCheckTask true
+      javaCompileTasks << compileJava
+      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.roborio)
+      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.raspbian)
+      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.aarch64bionic)
+      sources {
+        cpp {
+          source {
+            srcDirs 'src/main/driver/cpp'
+            include '**/*.cpp'
+          }
+          exportedHeaders {
+            srcDirs 'src/main/driver/include'
+          }
         }
+      }
+
+      nativeUtils.useRequiredLibrary(it, "driver_shared")
     }
+  }
+
+  testSuites {
+    AdiFrcImuTest {
+        sources.cpp {
+            source {
+                srcDir 'src/test/native/cpp'
+                include '**/*.cpp'
+            }
+        }
+
+        binaries.all {
+          lib library: 'AdiFrcImuDriver', linkage: 'shared'
+        }
+
+        nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+    }
+
+    AdiFrcImuDriverTest {
+        sources.cpp {
+            source {
+                srcDir 'src/test/driver/cpp'
+                include '**/*.cpp'
+            }
+        }
+
+        nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+    }
+  }
+}
+
+apply from: 'publish.gradle'
+
+wrapper {
+  gradleVersion = '6.0.1'
 }

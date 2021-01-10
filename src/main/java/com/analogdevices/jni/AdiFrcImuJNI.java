@@ -1,13 +1,13 @@
-package com.vendor.jni;
+package com.analogdevices.jni;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.wpi.first.wpiutil.RuntimeLoader;
 
-public class VendorJNI {
+public class AdiFrcImuJNI {
   static boolean libraryLoaded = false;
-  static RuntimeLoader<VendorJNI> loader = null;
+  static RuntimeLoader<AdiFrcImuJNI> loader = null;
 
   public static class Helper {
     private static AtomicBoolean extractOnStaticLoad = new AtomicBoolean(true);
@@ -24,7 +24,7 @@ public class VendorJNI {
   static {
     if (Helper.getExtractOnStaticLoad()) {
       try {
-        loader = new RuntimeLoader<>("Vendor", RuntimeLoader.getDefaultExtractionRoot(), VendorJNI.class);
+        loader = new RuntimeLoader<>("AdiFrcImu", RuntimeLoader.getDefaultExtractionRoot(), AdiFrcImuJNI.class);
         loader.loadLibrary();
       } catch (IOException ex) {
         ex.printStackTrace();
@@ -42,7 +42,7 @@ public class VendorJNI {
     if (libraryLoaded) {
       return;
     }
-    loader = new RuntimeLoader<>("VendorJNI", RuntimeLoader.getDefaultExtractionRoot(), VendorJNI.class);
+    loader = new RuntimeLoader<>("AdiFrcImuJNI", RuntimeLoader.getDefaultExtractionRoot(), AdiFrcImuJNI.class);
     loader.loadLibrary();
     libraryLoaded = true;
   }

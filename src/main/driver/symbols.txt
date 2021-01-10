@@ -1,4 +1,4 @@
 JNI_OnLoad
 JNI_OnUnload
-Java_com_vendor_jni_VendorJNI_initialize
+Java_com_analogdevices_jni_AdiFrcImuJNI_initialize
 c_doThing

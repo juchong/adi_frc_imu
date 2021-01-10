@@ -1,5 +1,5 @@
 #include "jni.h"
-#include "com_vendor_jni_VendorJNI.h"
+#include "com_analogdevices_jni_AdiFrcImuJNI.h"
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     // Check to ensure the JNI version is valid
@@ -16,7 +16,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {}
 
-JNIEXPORT jint JNICALL Java_com_vendor_jni_VendorJNI_initialize
+JNIEXPORT jint JNICALL Java_com_analogdevices_jni_AdiFrcImuJNI_initialize
   (JNIEnv *, jclass) {
   return 0;
 }

@@ -1,0 +1,71 @@
+{
+  "fileName": "AnalogDevices.json",
+  "name": "AnalogDevices",
+  "version": "2021.1.0",
+  "uuid": "3fab97e8-9643-4416-b611-5ad67c75806f",
+  "mavenUrls": [],
+  "jsonUrl": "",
+  "javaDependencies": [
+      {
+          "groupId": "com.analogdevices.frc",
+          "artifactId": "AdiFrcImu-java",
+          "version": "2021.1.0"
+      }
+  ],
+  "jniDependencies": [
+    {
+        "groupId": "com.analogdevices.frc",
+        "artifactId": "AdiFrcImu-driver",
+        "version": "2021.1.0",
+        "skipInvalidPlatforms": true,
+        "isJar": false,
+        "validPlatforms": [
+            "windowsx86-64",
+            "windowsx86",
+            "linuxaarch64bionic",
+            "linuxx86-64",
+            "linuxathena",
+            "linuxraspbian",
+            "osxx86-64"
+        ]
+    }
+],
+    "cppDependencies": [
+        {
+            "groupId": "com.analogdevices.frc",
+            "artifactId": "AdiFrcImu-cpp",
+            "version": "2021.1.0",
+            "libName": "AdiFrcImu",
+            "headerClassifier": "headers",
+            "sharedLibrary": false,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "windowsx86-64",
+                "windowsx86",
+                "linuxaarch64bionic",
+                "linuxx86-64",
+                "linuxathena",
+                "linuxraspbian",
+                "osxx86-64"
+            ]
+        },
+        {
+            "groupId": "com.analogdevices.frc",
+            "artifactId": "AdiFrcImu-driver",
+            "version": "2021.1.0",
+            "libName": "AdiFrcImuDriver",
+            "headerClassifier": "headers",
+            "sharedLibrary": false,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "windowsx86-64",
+                "windowsx86",
+                "linuxaarch64bionic",
+                "linuxx86-64",
+                "linuxathena",
+                "linuxraspbian",
+                "osxx86-64"
+            ]
+        }
+    ]
+}
