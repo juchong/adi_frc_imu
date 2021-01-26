@@ -92,8 +92,8 @@ c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteContinuousCalTime(c_AnalogD
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteFilterSetting(c_AnalogDevicesIMU_Handle handle, int filtSetting);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteDataReadyPolarity(c_AnalogDevicesIMU_Handle handle, int drPolarity);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteSettingsToFlash(c_AnalogDevicesIMU_Handle handle);
-c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_ReadRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* rxBuf);
-c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* txBuf);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_ReadRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t *regData);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t val);
 
 
 }
