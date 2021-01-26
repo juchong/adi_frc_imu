@@ -61,7 +61,7 @@ typedef enum {
   _64s = 11
 } c_AnalogDevicesIMU_ContinuousCalTime;
 
-c_AnalogDevicesIMU_Handle c_AnalogDevicesIMU_Create(c_AnalogDevicesIMU_IMUType deviceID);
+c_AnalogDevicesIMU_Handle c_AnalogDevicesIMU_Create(c_AnalogDevicesIMU_IMUType deviceType, c_AnalogDevicesIMU_YawAxis yawAxis);
 void c_AnalogDevicesIMU_Destroy(c_AnalogDevicesIMU_Handle handle);
 
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetMetadata(c_AnalogDevicesIMU_Handle handle);
@@ -73,16 +73,8 @@ c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteSampleRate(c_AnalogDevicesI
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteContinuousCalTime(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_ContinuousCalTime calTime);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteFilterSetting(c_AnalogDevicesIMU_Handle handle, int filtSetting);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteSettingsToFlash(c_AnalogDevicesIMU_Handle handle);
-
-void c_doThing();
-
-
-
-
-
-
-
-
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_ReadRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* rxBuf);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* txBuf);
 
 
 }

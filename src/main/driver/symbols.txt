@@ -1,4 +1,5 @@
 JNI_OnLoad
 JNI_OnUnload
 Java_com_analogdevices_jni_adiIMUJNI_initialize
-c_doThing
+c_AnalogDevicesIMU_Create
+c_AnalogDevicesIMU_Destroy

@@ -20,6 +20,7 @@ typedef enum {
     c_AnalogDevicesIMU_ErrorBufferOverflow,
     c_AnalogDevicesIMU_ErrorDataReadyFailed,
     c_AnalogDevicesIMU_ErrorBadChecksumCRC,
+    c_AnalogDevicesIMU_ErrorIMUTypeAlreadyInit
 } c_AnalogDevicesIMU_ErrorCode;
 
 

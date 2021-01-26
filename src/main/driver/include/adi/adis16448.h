@@ -1,8 +1,5 @@
 #include <stdint.h>
 
-#include "adi/adiIMUErrors.h"
-#include "adi/adiIMU.h"
-
 #if defined(__cplusplus) && __has_include(<array>)
 #else
 #error This project requires C++11 or greater
@@ -19,47 +16,46 @@ const double c_AnalogDevicesIMU_k448BaroScale = 50;
 
 /* ADIS16448 Register Map Declaration */
 /* This IMU does not support a paged address scheme */
-/** @brief ADIS16448 Register Map Declaration */
-const uint8_t FLASH_CNT_448    =   0x00;   // Flash memory write count
-const uint8_t XGYRO_OUT_448    =   0x04;   // X-axis gyroscope output
-const uint8_t YGYRO_OUT_448    =   0x06;   // Y-axis gyroscope output
-const uint8_t ZGYRO_OUT_448    =   0x08;   // Z-axis gyroscope output
-const uint8_t XACCL_OUT_448    =   0x0A;   // X-axis accelerometer output
-const uint8_t YACCL_OUT_448    =   0x0C;   // Y-axis accelerometer output
-const uint8_t ZACCL_OUT_448    =   0x0E;   // Z-axis accelerometer output
-const uint8_t XMAGN_OUT_448    =   0x10;   // X-axis magnetometer output
-const uint8_t YMAGN_OUT_448    =   0x12;   // Y-axis magnetometer output
-const uint8_t ZMAGN_OUT_448    =   0x14;   // Z-axis magnetometer output
-const uint8_t BARO_OUT_448     =   0x16;   // Barometer pressure measurement, high word
-const uint8_t TEMP_OUT_448     =   0x18;   // Temperature output
-const uint8_t XGYRO_OFF_448    =   0x1A;   // X-axis gyroscope bias offset factor
-const uint8_t YGYRO_OFF_448    =   0x1C;   // Y-axis gyroscope bias offset factor
-const uint8_t ZGYRO_OFF_448    =   0x1E;   // Z-axis gyroscope bias offset factor
-const uint8_t XACCL_OFF_448    =   0x20;   // X-axis acceleration bias offset factor
-const uint8_t YACCL_OFF_448    =   0x22;   // Y-axis acceleration bias offset factor
-const uint8_t ZACCL_OFF_448    =   0x24;   // Z-axis acceleration bias offset factor
-const uint8_t XMAGN_HIC_448    =   0x26;   // X-axis magnetometer, hard iron factor
-const uint8_t YMAGN_HIC_448    =   0x28;   // Y-axis magnetometer, hard iron factor
-const uint8_t ZMAGN_HIC_448    =   0x2A;   // Z-axis magnetometer, hard iron factor
-const uint8_t XMAGN_SIC_448    =   0x2C;   // X-axis magnetometer, soft iron factor
-const uint8_t YMAGN_SIC_448    =   0x2E;   // Y-axis magnetometer, soft iron factor
-const uint8_t ZMAGN_SIC_448    =   0x30;   // Z-axis magnetometer, soft iron factor
-const uint8_t GPIO_CTRL_448    =   0x32;   // GPIO control
-const uint8_t MSC_CTRL_448     =   0x34;   // MISC control
-const uint8_t SMPL_PRD_448     =   0x36;   // Sample clock/Decimation filter control
-const uint8_t SENS_AVG_448     =   0x38;   // Digital filter control
-const uint8_t SEQ_CNT_448      =   0x3A;   // MAGN_OUT and BARO_OUT counter
-const uint8_t DIAG_STAT_448    =   0x3C;   // System status
-const uint8_t GLOB_CMD_448     =   0x3E;   // System command
-const uint8_t ALM_MAG1_448     =   0x40;   // Alarm 1 amplitude threshold
-const uint8_t ALM_MAG2_448     =   0x42;   // Alarm 2 amplitude threshold
-const uint8_t ALM_SMPL1_448    =   0x44;   // Alarm 1 sample size
-const uint8_t ALM_SMPL2_448    =   0x46;   // Alarm 2 sample size
-const uint8_t ALM_CTRL_448     =   0x48;   // Alarm control
-const uint8_t LOT_ID1_448      =   0x52;   // Lot identification number
-const uint8_t LOT_ID2_448      =   0x54;   // Lot identification number
-const uint8_t PROD_ID_448      =   0x56;   // Product identifier
-const uint8_t SERIAL_NUM_448   =   0x58;   // Lot-specific serial number
+static const uint8_t FLASH_CNT_448    =   0x00;   // Flash memory write count
+static const uint8_t XGYRO_OUT_448    =   0x04;   // X-axis gyroscope output
+static const uint8_t YGYRO_OUT_448    =   0x06;   // Y-axis gyroscope output
+static const uint8_t ZGYRO_OUT_448    =   0x08;   // Z-axis gyroscope output
+static const uint8_t XACCL_OUT_448    =   0x0A;   // X-axis accelerometer output
+static const uint8_t YACCL_OUT_448    =   0x0C;   // Y-axis accelerometer output
+static const uint8_t ZACCL_OUT_448    =   0x0E;   // Z-axis accelerometer output
+static const uint8_t XMAGN_OUT_448    =   0x10;   // X-axis magnetometer output
+static const uint8_t YMAGN_OUT_448    =   0x12;   // Y-axis magnetometer output
+static const uint8_t ZMAGN_OUT_448    =   0x14;   // Z-axis magnetometer output
+static const uint8_t BARO_OUT_448     =   0x16;   // Barometer pressure measurement, high word
+static const uint8_t TEMP_OUT_448     =   0x18;   // Temperature output
+static const uint8_t XGYRO_OFF_448    =   0x1A;   // X-axis gyroscope bias offset factor
+static const uint8_t YGYRO_OFF_448    =   0x1C;   // Y-axis gyroscope bias offset factor
+static const uint8_t ZGYRO_OFF_448    =   0x1E;   // Z-axis gyroscope bias offset factor
+static const uint8_t XACCL_OFF_448    =   0x20;   // X-axis acceleration bias offset factor
+static const uint8_t YACCL_OFF_448    =   0x22;   // Y-axis acceleration bias offset factor
+static const uint8_t ZACCL_OFF_448    =   0x24;   // Z-axis acceleration bias offset factor
+static const uint8_t XMAGN_HIC_448    =   0x26;   // X-axis magnetometer, hard iron factor
+static const uint8_t YMAGN_HIC_448    =   0x28;   // Y-axis magnetometer, hard iron factor
+static const uint8_t ZMAGN_HIC_448    =   0x2A;   // Z-axis magnetometer, hard iron factor
+static const uint8_t XMAGN_SIC_448    =   0x2C;   // X-axis magnetometer, soft iron factor
+static const uint8_t YMAGN_SIC_448    =   0x2E;   // Y-axis magnetometer, soft iron factor
+static const uint8_t ZMAGN_SIC_448    =   0x30;   // Z-axis magnetometer, soft iron factor
+static const uint8_t GPIO_CTRL_448    =   0x32;   // GPIO control
+static const uint8_t MSC_CTRL_448     =   0x34;   // MISC control
+static const uint8_t SMPL_PRD_448     =   0x36;   // Sample clock/Decimation filter control
+static const uint8_t SENS_AVG_448     =   0x38;   // Digital filter control
+static const uint8_t SEQ_CNT_448      =   0x3A;   // MAGN_OUT and BARO_OUT counter
+static const uint8_t DIAG_STAT_448    =   0x3C;   // System status
+static const uint8_t GLOB_CMD_448     =   0x3E;   // System command
+static const uint8_t ALM_MAG1_448     =   0x40;   // Alarm 1 amplitude threshold
+static const uint8_t ALM_MAG2_448     =   0x42;   // Alarm 2 amplitude threshold
+static const uint8_t ALM_SMPL1_448    =   0x44;   // Alarm 1 sample size
+static const uint8_t ALM_SMPL2_448    =   0x46;   // Alarm 2 sample size
+static const uint8_t ALM_CTRL_448     =   0x48;   // Alarm control
+static const uint8_t LOT_ID1_448      =   0x52;   // Lot identification number
+static const uint8_t LOT_ID2_448      =   0x54;   // Lot identification number
+static const uint8_t PROD_ID_448      =   0x56;   // Product identifier
+static const uint8_t SERIAL_NUM_448   =   0x58;   // Lot-specific serial number
 
 /* IMU Metadata (Sensor ID Info) */
 typedef struct {
