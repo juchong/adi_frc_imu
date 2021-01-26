@@ -72,25 +72,6 @@ static const uint8_t USER_SCR3_470      =   0x7A;  //User scratch register 3
 static const uint8_t FLSHCNT_LOW_470    =   0x7C;  //Flash update count, lower word 
 static const uint8_t FLSHCNT_HIGH_470   =   0x7E;  //Flash update count, upper word 
 
-/* IMU Metadata (Sensor ID Info) */
-typedef struct {
-  uint16_t programYear;
-  uint16_t fwRev;
-  uint16_t prodId;
-  uint16_t serialNum;
-  uint16_t diagStatus;
-  uint32_t flashCnt;
-} c_AnalogDevicesIMU_470Metadata;
-
-/* IMU Settings */
-typedef struct {
-  uint16_t filtCtrl;
-  uint16_t mscCtrl;
-  uint16_t decRate;
-  uint16_t nullCfg;
-  uint16_t upScale;
-} c_AnalogDevicesIMU_470Settings;
-
 /* Scaled Angle Outputs */
 typedef struct {
   double yawAngle;

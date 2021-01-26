@@ -61,17 +61,36 @@ typedef enum {
   _64s = 11
 } c_AnalogDevicesIMU_ContinuousCalTime;
 
+/* IMU Metadata (Sensor ID Info) */
+typedef struct {
+  uint16_t programYear;
+  uint16_t fwRev;
+  uint16_t prodId;
+  uint16_t serialNum;
+  uint16_t diagStatus;
+  uint32_t flashCnt;
+} c_AnalogDevicesIMU_SensorMetadata;
+
+/* IMU Settings */
+typedef struct {
+  uint16_t filtCtrl;
+  uint16_t mscCtrl;
+  uint16_t sampleRate;
+  uint16_t nullCfg;
+} c_AnalogDevicesIMU_SensorSettings;
+
 c_AnalogDevicesIMU_Handle c_AnalogDevicesIMU_Create(c_AnalogDevicesIMU_IMUType deviceType, c_AnalogDevicesIMU_YawAxis yawAxis);
 void c_AnalogDevicesIMU_Destroy(c_AnalogDevicesIMU_Handle handle);
 
-c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetMetadata(c_AnalogDevicesIMU_Handle handle);
-c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetSettings(c_AnalogDevicesIMU_Handle handle);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetMetadata(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_SensorMetadata* metadata);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetSettings(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_SensorSettings* settings);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetAngle(c_AnalogDevicesIMU_Handle handle);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetUnscaledData(c_AnalogDevicesIMU_Handle handle);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetScaledData(c_AnalogDevicesIMU_Handle handle);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteSampleRate(c_AnalogDevicesIMU_Handle handle, int sampleRate);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteContinuousCalTime(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_ContinuousCalTime calTime);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteFilterSetting(c_AnalogDevicesIMU_Handle handle, int filtSetting);
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteDataReadyPolarity(c_AnalogDevicesIMU_Handle handle, int drPolarity);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteSettingsToFlash(c_AnalogDevicesIMU_Handle handle);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_ReadRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* rxBuf);
 c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t* txBuf);

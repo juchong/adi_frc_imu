@@ -57,23 +57,6 @@ static const uint8_t LOT_ID2_448      =   0x54;   // Lot identification number
 static const uint8_t PROD_ID_448      =   0x56;   // Product identifier
 static const uint8_t SERIAL_NUM_448   =   0x58;   // Lot-specific serial number
 
-/* IMU Metadata (Sensor ID Info) */
-typedef struct {
-  uint16_t fwRev;
-  uint16_t prodId;
-  uint16_t serialNum;
-  uint16_t diagStatus;
-  uint32_t flashCnt;
-} c_AnalogDevicesIMU_448Metadata;
-
-/* IMU Settings */
-typedef struct {
-  uint16_t filtCtrl;
-  uint16_t mscCtrl;
-  uint16_t decRate;
-  uint16_t nullCfg;
-} c_AnalogDevicesIMU_448Settings;
-
 /* Scaled Angle Outputs */
 typedef struct {
   double yawAngle;

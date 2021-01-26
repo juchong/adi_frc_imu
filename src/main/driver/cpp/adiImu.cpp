@@ -88,6 +88,104 @@ void c_AnalogDevicesIMU_Destroy(c_AnalogDevicesIMU_Handle handle) {
     //TODO: Do I need to do anything to clean up the DIOs?
 }
 
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_ReadRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t regData) {
+    int32_t status = 0;
+    c_AnalogDevicesIMU_ErrorCode errorCode = c_AnalogDevicesIMU_ErrorNone;
+    uint8_t txBuf[2];
+    uint8_t rxBuf[2];
+    txBuf[0] = reg & 0x7F;
+    txBuf[1] = 0x00;
+
+    /* Note: I can't use TransactionSPI because there is no way to guarantee stall time */
+    status = HAL_WriteSPI(handle->m_spiPort, txBuf, 2);
+    //TODO: Check stall time here
+    status = HAL_ReadSPI(handle->m_spiPort, rxBuf, 2);
+
+    regData = (uint16_t)((rxBuf[0] << 8) | rxBuf[1]);
+
+    //TODO: Process SPI HAL error codes
+
+    return errorCode;
+}
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_WriteRegister(c_AnalogDevicesIMU_Handle handle, uint8_t reg, uint16_t val) {
+    int32_t status = 0;
+    c_AnalogDevicesIMU_ErrorCode errorCode = c_AnalogDevicesIMU_ErrorNone;
+    uint8_t txBuf[4];
+    txBuf[0] = (0x80 | reg);
+    txBuf[1] = val & 0xFF;
+    txBuf[2] = ((0x80 | reg) + 1);
+    txBuf[3] = ((val >> 8) & 0xFF);
+
+    //TODO: Check that this works as expected. Telling the API that I'm writing two bytes should drop CS after every two bytes are transmitted.
+    status = HAL_WriteSPI(handle->m_spiPort, txBuf, 2);
+
+    //TODO: Process SPI HAL error codes
+    
+    return errorCode;
+}
+
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetMetadata(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_SensorMetadata* metadata) {
+    c_AnalogDevicesIMU_ErrorCode errorCode = c_AnalogDevicesIMU_ErrorNone;
+    if(handle->m_deviceType == ADIS16448) {
+        /* Program year */
+        metadata->programYear = 0xFF; /* The 448 was never programmed with this ID */
+        /* FW Rev */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, LOT_ID1_448, metadata->fwRev);
+        /* Product ID */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, PROD_ID_448, metadata->prodId);
+        /* Serial Number */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, SERIAL_NUM_448, metadata->serialNum);
+        /* Status Reg */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, DIAG_STAT_448, metadata->diagStatus);
+        /* Flash Count */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, FLASH_CNT_448, metadata->flashCnt);
+    }
+    else {
+        /* Program year */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, USER_SCR1_470, metadata->programYear);
+        /* FW Rev */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, FIRM_REV_470, metadata->fwRev);
+        /* Product ID */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, PROD_ID_470, metadata->prodId);
+        /* Serial Number */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, SERIAL_NUM_470, metadata->serialNum);
+        /* Status Reg */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, DIAG_STAT_470, metadata->diagStatus);
+        /* Flash Count */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, FLSHCNT_LOW_470, metadata->flashCnt);
+    }
+    return errorCode;
+}
+
+c_AnalogDevicesIMU_ErrorCode c_AnalogDevicesIMU_GetSettings(c_AnalogDevicesIMU_Handle handle, c_AnalogDevicesIMU_SensorSettings* settings) {
+    c_AnalogDevicesIMU_ErrorCode errorCode = c_AnalogDevicesIMU_ErrorNone;
+    uint16_t tmp = 0x00;
+    if(handle->m_deviceType == ADIS16448) {
+        /* Filter Setting */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, SENS_AVG_448, tmp);
+        settings->filtCtrl = (tmp & 0x03); /* Mask range and unused bits */
+        /* MSC_CTRL */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, MSC_CTRL_448, settings->mscCtrl);
+        /* Sample Rate*/
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, MSC_CTRL_448, tmp);
+        settings->sampleRate = (tmp & 0x1F00); /* Mask sample clock setting and unused bits */
+        /* NULL_CNFG */
+        settings->nullCfg = 0xFF; /* The 448 does not have this setting */
+    }
+    else {
+        /* Filter Setting */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, FILT_CTRL_470, tmp);
+        settings->filtCtrl = (tmp & 0x03); /* Mask unused bits */
+        /* MSC_CTRL */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, MSC_CTRL_470, settings->mscCtrl);
+        /* Sample Rate*/
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, DEC_RATE_470, settings->sampleRate);
+        /* NULL_CNFG */
+        errorCode = c_AnalogDevicesIMU_ReadRegister(handle, NULL_CNFG_470, settings->nullCfg);
+    }
+    return errorCode;
+}
+
 
 
 }
