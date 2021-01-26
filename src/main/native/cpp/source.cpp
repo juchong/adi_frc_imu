@@ -1,5 +1,5 @@
 #include "header.h"
-#include "driverheader.h"
+#include "adi/adiIMU.h"
 
 void func() {
   c_doThing();

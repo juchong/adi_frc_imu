@@ -5,9 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.wpi.first.wpiutil.RuntimeLoader;
 
-public class AdiFrcImuJNI {
+public class adiIMUJNI {
   static boolean libraryLoaded = false;
-  static RuntimeLoader<AdiFrcImuJNI> loader = null;
+  static RuntimeLoader<adiIMUJNI> loader = null;
 
   public static class Helper {
     private static AtomicBoolean extractOnStaticLoad = new AtomicBoolean(true);
@@ -24,7 +24,7 @@ public class AdiFrcImuJNI {
   static {
     if (Helper.getExtractOnStaticLoad()) {
       try {
-        loader = new RuntimeLoader<>("AdiFrcImu", RuntimeLoader.getDefaultExtractionRoot(), AdiFrcImuJNI.class);
+        loader = new RuntimeLoader<>("AdiFrcImu", RuntimeLoader.getDefaultExtractionRoot(), adiIMUJNI.class);
         loader.loadLibrary();
       } catch (IOException ex) {
         ex.printStackTrace();
@@ -42,7 +42,7 @@ public class AdiFrcImuJNI {
     if (libraryLoaded) {
       return;
     }
-    loader = new RuntimeLoader<>("AdiFrcImuJNI", RuntimeLoader.getDefaultExtractionRoot(), AdiFrcImuJNI.class);
+    loader = new RuntimeLoader<>("AdiFrcImuJNI", RuntimeLoader.getDefaultExtractionRoot(), adiIMUJNI.class);
     loader.loadLibrary();
     libraryLoaded = true;
   }
