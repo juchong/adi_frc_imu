@@ -16,6 +16,7 @@
 
 #include "adi/adiIMUErrors.h"
 #include "adi/adis16470.h"
+#include "adi/adis16448.h"
 
 #if defined(__cplusplus) && __has_include(<array>)
 #else

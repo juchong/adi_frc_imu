@@ -11,12 +11,10 @@
 extern "C" {
 
 /* ADIS16470 specific Constants */
-const double c_AnalogDevicesIMU_kdelta_angle_sf = 2160.0 / 2147483648.0; /* 2160 / (2^31) */
-const int c_AnalogDevicesIMU_kValid470ProdID = 16982;
-const double c_AnalogDevicesIMU_k32bitGyroScale = 655360;
-const double c_AnalogDevicesIMU_k32bitAccelScale = 52428800;
-const double c_AnalogDevicesIMU_k16bitGyroScale = 10;
-const double c_AnalogDevicesIMU_k16bitAccelScale = 800;
+const double c_AnalogDevicesIMU_k470DeltaAngleSF = 2160.0 / 2147483648.0; /* 2160 / (2^31) */
+const int c_AnalogDevicesIMU_k470ValidProdID = 16982;
+const double c_AnalogDevicesIMU_k470GyroScale = 10;
+const double c_AnalogDevicesIMU_k470AccelScale = 800;
 
 /* ADIS16470 Register Map Declaration */
 /* This IMU does not support a paged address scheme */
